@@ -1,0 +1,14 @@
+# Go data science
+
+*.jpg
+*.png
+*.html
+*.svg
+*.exe
+*.out
+*.log
+*.tmp
+*.exe~
+*.out~
+*.log~
+*.tmp~
