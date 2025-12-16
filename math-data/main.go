@@ -10,9 +10,9 @@ import (
 )
 
 func main() {
-	// Crear gráfico de línea
-	line := charts.NewLine()
-	line.SetGlobalOptions(
+	// Crear gráfico de scatter (dispersión) que maneja mejor los valores numéricos
+	scatter := charts.NewScatter()
+	scatter.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{
 			Title:    "Gráfico de f(x) = x²",
 			Subtitle: "Parábola cuadrática",
@@ -22,32 +22,24 @@ func main() {
 		}),
 		charts.WithXAxisOpts(opts.XAxis{
 			Name: "x",
+			Type: "value",
 		}),
 		charts.WithYAxisOpts(opts.YAxis{
 			Name: "f(x)",
+			Type: "value",
 		}),
 	)
 
 	// Generar datos para x² desde -10 a 10
-	var xAxis []string
-	var yAxis []opts.LineData
+	var items []opts.ScatterData
 
-	for x := -10.0; x <= 10.0; x += 0.5 {
-		xAxis = append(xAxis, fmt.Sprintf("%.1f", x))
+	for x := -10.0; x <= 10.0; x += 0.1 {
 		y := x * x
-		yAxis = append(yAxis, opts.LineData{Value: y})
+		items = append(items, opts.ScatterData{Value: []interface{}{x, y}})
 	}
 
-	// Configurar eje X y agregar datos
-	line.SetGlobalOptions(
-		charts.WithXAxisOpts(opts.XAxis{
-			Name: "x",
-			Data: xAxis,
-		}),
-	)
-
 	// Agregar los datos al gráfico
-	line.AddSeries("f(x) = x²", yAxis)
+	scatter.AddSeries("f(x) = x²", items)
 
 	// Guardar como HTML
 	archivo := "grafico_x2.html"
@@ -58,7 +50,7 @@ func main() {
 	}
 	defer f.Close()
 
-	if err := line.Render(f); err != nil {
+	if err := scatter.Render(f); err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
